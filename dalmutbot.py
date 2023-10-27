@@ -1,7 +1,6 @@
 import discord
 from discord.ext import commands, tasks
 import os
-
 from dotenv import load_dotenv
 
 #.env 파일 변수 불러오기
@@ -14,8 +13,8 @@ if bot_token is None:
 # 권한 설정
 intents = discord.Intents.default()
 intents.all()
-intents.message_content = True
-intents.members = True
+intents.message_content = True #키워드 메시지 수신을 위한 권한
+intents.members = True #신규 사용자 환영메시지 생성을 위한 권한
 bot = commands.Bot(command_prefix='!', intents=intents)
 
 welcome_channel_id = 1166665557240729640 #환영 채널 id
@@ -56,7 +55,5 @@ async def on_member_join(member):
     # 환영 메시지를 보냅니다
     await channel.send(f'환영합니다, {member.mention}님! 서버에 참여해주셔서 감사합니다.')
 
-
 # 봇을 실행
 bot.run(bot_token)  # 봇 토큰을 여기에 입력
-
