@@ -22,12 +22,12 @@ welcome_channel_id = 1166665557240729640 #환영 채널 id
 @bot.event #봇 시작
 async def on_ready():
     await bot.change_presence(status=discord.Status.online)
-    print(f'봇이 {bot.user.name}로 로그인했습니다!')
+    print(f'봇이 {bot.user.name}(으)로 로그인했습니다!')
 
 @bot.command() #ping
 async def ping(ctx):
     await ctx.send('pong!')
-    print("명령어 수신")
+    print("명령어 수신 !ping")
 
 @bot.event #키워드 응답
 async def on_message(message):
@@ -43,9 +43,8 @@ async def on_message(message):
 
     # 다른 메시지의 경우
     else:
-        print(f"무시된 메시지: {message.author.name} - {message.content}")
-    # 명령어 처리
-    await bot.process_commands(message)
+        # 명령어 처리
+        await bot.process_commands(message)
 
 @bot.event #신규 사용자 환영 메시지
 async def on_member_join(member):
