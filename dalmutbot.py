@@ -54,6 +54,7 @@ async def on_member_join(member):
     
     # 환영 메시지를 보냅니다
     await channel.send(f'환영합니다, {member.mention}님! 서버에 참여해주셔서 감사합니다.')
+    print('{} 환영메시지 전송'.format(member.mention))
 
 # 봇을 실행
 bot.run(bot_token)  # 봇 토큰을 여기에 입력
