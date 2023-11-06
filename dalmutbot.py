@@ -36,10 +36,18 @@ async def on_message(message):
         # 봇이 보낸 메시지이므로 무시
         return
 
-    # 메시지 내용에 '테스트' 키워드가 포함된 경우
-    if '테스트' in message.content:
-        print(f"테스트 메시지 수신: {message.author.name} - {message.content}")
-        await message.channel.send('테스트중입니다')
+    keyword_responses = {
+            '테스트': '테스트중입니다',
+            '금지어': '"금지어" 용어 사용시 채널에서 차단될 수 있습니다. 공지사항을 확인해주세요',
+            '도움말': '도움말 메시지를 표시합니다.',
+            # 다른 키워드와 응답을 여기에 추가
+        }
+
+    # 메시지 내용과 등록된 키워드를 비교하여 응답을 찾음
+    for keyword, response in keyword_responses.items():
+        if keyword in message.content:
+            print(f"{keyword} 메시지 수신: {message.author.name} - {message.content}")
+            await message.channel.send(response)
 
     # 다른 메시지의 경우
     else:
