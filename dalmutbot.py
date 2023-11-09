@@ -45,15 +45,20 @@ def read_random_messages(filename):
 
 # 무작위 메시지 목록을 불러와서 random_messages 변수에 저장
 random_messages = read_random_messages('messages.txt')
+used_messages = []  # 이미 사용된 메시지를 추적하는 리스트
 
 #랜덤 메시지 발송 함수 정의
 async def send_random_message():
+    global random_messages  # 이 부분은 메시지 목록을 유지하기 위해 전역 변수로 설정
+    if not random_messages:  # 메시지가 다 떨어졌는지 확인
+        random_messages = read_random_messages('messages.txt')  # 메시지를 다시 불러옴
     random_message_tuple = random.choice(random_messages)
-    channel = bot.get_channel(test_channel_id)
+    channel = bot.get_channel(test_channel_id)  # test_channel_id는 알맞게 설정되어 있어야 함
+    random_messages.remove(random_message_tuple)  # 사용된 메시지는 리스트에서 제거
     message_content = random_message_tuple[1]
-    if message_content.strip():
+    if message_content.strip():  # 메시지 내용이 공백이 아닌지 확인
         await channel.send(message_content)
-        print("랜덤 {} 전송 완료".format(random_message_tuple[0]))
+        print(f"Random message sent: {random_message_tuple[0]}")  # 메시지 이름을 로그에 출력
 
 # 파일에서 keyword_responses를 불러오는 함수
 def load_keyword_responses(filename):
@@ -93,7 +98,7 @@ async def on_ready():
     send_random_message_task.start()  # 랜덤 메시지 발송 시작
     send_morning_message.start()
 
-@tasks.loop(hours=24) #하루에 한번씩 랜덤 메시지 발송
+@tasks.loop(seconds=3) #하루에 한번씩 랜덤 메시지 발송
 async def send_random_message_task():
     print("랜덤 메시지 발송 시작")
     await send_random_message()
@@ -103,8 +108,8 @@ async def send_morning_message():
     now = datetime.datetime.now()
     
     # 평일 아침 9시인지 확인
-    
-    if now.weekday() < 5 and now.hour == 10:
+    print(now.hour)
+    if now.weekday() < 5 and now.hour == 19:
         # 원하는 채널 ID를 넣어주세요
         channel_id = test_channel_id
         channel = bot.get_channel(channel_id)
